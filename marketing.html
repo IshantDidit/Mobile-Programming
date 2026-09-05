@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Kati? — Prototype | Kathmandu local price discovery -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kati? — Your money, in real life. A Kathmandu local price discovery prototype." />
+  <title>Kati? — Your money, in real life.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --blue-50:#f0f9ff;
+      --blue-100:#e0f2fe;
+      --blue-200:#bae6fd;
+      --blue-400:#38bdf8;
+      --blue-600:#0284c7;
+      --blue-700:#0369a1;
+      --blue-900:#0c4a6e;
+
+      --red:#dc2626;
+      --red-dark:#b91c1c;
+      --orange:#f59e0b;
+      --orange-soft:#fff7ed;
+      --green:#16a34a;
+      --green-soft:#f0fdf4;
+
+      --ink:#172033;
+      --muted:#64748b;
+      --border:#d7eaf5;
+      --background:#f6fbfe;
+      --surface:#ffffff;
+      --shadow:0 12px 35px rgba(3,105,161,.08);
+      --shadow-hover:0 18px 45px rgba(3,105,161,.14);
+      --radius:22px;
+
+      /* Theme-aware tokens (light defaults) */
+      --nav-bg:rgba(246,251,254,.88);
+      --nav-border:rgba(215,234,245,.8);
+      --text-secondary:#475569;
+      --text-tertiary:#334155;
+      --divider:#eef5f9;
+      --card-shadow-sm:0 5px 20px rgba(3,105,161,.045);
+      --card-shadow-flow:0 5px 15px rgba(3,105,161,.04);
+      --photo-card-bg:#dceff8;
+      --photo-overlay:linear-gradient(transparent,rgba(12,38,53,.78));
+      --photo-badge-bg:rgba(255,255,255,.92);
+      --disclaimer-bg:#fffaf0;
+      --disclaimer-border:#fde7bd;
+      --disclaimer-text:#7c5a16;
+      --footer-bg:#0c2635;
+      --footer-text:white;
+      --footer-muted:#a9c0ce;
+      --footer-border:rgba(255,255,255,.1);
+      --footer-bottom-text:#86a0ae;
+      --modal-backdrop:rgba(8,25,38,.55);
+      --map-bg:var(--blue-50);
+      --map-lines:#d8edf7;
+      --input-bg:#ffffff;
+      --mobile-menu-bg:#ffffff;
+      --contribute-btn-border:rgba(255,255,255,.4);
+      --icon-tint:rgba(255,255,255,.13);
+      --scrollbar-thumb:#cbd5e1;
+    }
+
+    [data-theme="dark"] {
+      --blue-50:#0b2233;
+      --blue-100:#0f2c42;
+      --blue-200:#164058;
+      --blue-400:#38bdf8;
+      --blue-600:#38bdf8;
+      --blue-700:#5ec7fb;
+      --blue-900:#e0f2fe;
+
+      --red:#f87171;
+      --red-dark:#ef4444;
+      --orange:#fbbf24;
+      --orange-soft:#2a2013;
+      --green:#4ade80;
+      --green-soft:#12271a;
+
+      --ink:#eef4fb;
+      --muted:#94a3b8;
+      --border:#233246;
+      --background:#0b1220;
+      --surface:#131c2e;
+      --shadow:0 12px 35px rgba(0,0,0,.35);
+      --shadow-hover:0 18px 45px rgba(0,0,0,.45);
+
+      --nav-bg:rgba(11,18,32,.88);
+      --nav-border:rgba(35,50,70,.8);
+      --text-secondary:#cbd5e1;
+      --text-tertiary:#e2e8f0;
+      --divider:#1e293b;
+      --card-shadow-sm:0 5px 20px rgba(0,0,0,.25);
+      --card-shadow-flow:0 5px 15px rgba(0,0,0,.2);
+      --photo-card-bg:#0f2c42;
+      --photo-overlay:linear-gradient(transparent,rgba(0,0,0,.85));
+      --photo-badge-bg:rgba(19,28,46,.88);
+      --disclaimer-bg:#26200f;
+      --disclaimer-border:#4a3c17;
+      --disclaimer-text:#f2c76b;
+      --footer-bg:#060a13;
+      --footer-text:#eef4fb;
+      --footer-muted:#7f95a8;
+      --footer-border:rgba(255,255,255,.08);
+      --footer-bottom-text:#5f7284;
+      --modal-backdrop:rgba(2,6,15,.7);
+      --map-bg:#0f1b2c;
+      --map-lines:#1c3348;
+      --input-bg:#0f1826;
+      --mobile-menu-bg:#131c2e;
+      --contribute-btn-border:rgba(255,255,255,.25);
+      --icon-tint:rgba(255,255,255,.1);
+      --scrollbar-thumb:#334155;
+    }
+
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:"Inter","DM Sans",sans-serif;
+      color:var(--ink);
+      background:var(--background);
+      line-height:1.5;
+      overflow-x:hidden;
+      transition:background .25s ease,color .25s ease;
+    }
+    button,input,select,textarea { font:inherit; }
+    button { cursor:pointer; }
+    a { color:inherit; text-decoration:none; }
+    .container { width:min(1160px,calc(100% - 40px)); margin:auto; }
+
+    /* Navigation */
+    .nav {
+      position:sticky; top:0; z-index:100;
+      background:var(--nav-bg);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--nav-border);
+    }
+    .nav-inner {
+      height:72px; display:flex; align-items:center; justify-content:space-between; gap:25px;
+    }
+    .brand { display:flex; align-items:center; gap:11px; }
+    .brand-mark {
+      width:38px;height:38px;border-radius:12px;
+      display:grid;place-items:center;
+      background:var(--red);color:white;font-weight:800;font-size:21px;
+      box-shadow:0 6px 18px rgba(220,38,38,.2);
+    }
+    .brand-name { font-size:20px;font-weight:800;letter-spacing:-.5px; }
+    .brand-tagline { font-size:10px;color:var(--muted);margin-top:-2px; }
+    .nav-links { display:flex;gap:28px;align-items:center;margin-left:auto; }
+    .nav-links a { color:var(--text-secondary);font-size:14px;font-weight:600; }
+    .nav-links a:hover { color:var(--blue-700); }
+    .nav-right { display:flex;align-items:center;gap:10px; }
+    .location-nav {
+      border:1px solid var(--border);background:var(--surface);border-radius:12px;
+      padding:9px 12px;color:var(--text-tertiary);font-size:13px;font-weight:600;
+      display:flex;align-items:center;gap:6px;
+    }
+    .fixed-location { color:var(--blue-700);background:var(--blue-50);border-color:var(--blue-200); }
+    .fixed-location-selector { cursor:default; }
+    .fixed-badge { background:var(--red);color:white;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:800;letter-spacing:.4px; }
+    .avatar { width:36px;height:36px;border-radius:50%;background:var(--blue-100);display:grid;place-items:center;color:var(--blue-700); }
+    .mobile-menu-btn { display:none;border:0;background:var(--surface);padding:9px;border-radius:10px;color:var(--ink); }
+    .theme-toggle {
+      width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+      background:var(--surface);color:var(--blue-700);display:grid;place-items:center;transition:.2s;
+    }
+    .theme-toggle:hover { background:var(--blue-100); }
+
+    /* Hero */
+    .hero {
+      padding:72px 0 60px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(56,189,248,.15), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(220,38,38,.08), transparent 25%),
+        var(--background);
+    }
+    .hero-grid { display:grid;grid-template-columns:1.1fr .9fr;gap:55px;align-items:center; }
+    .eyebrow {
+      display:inline-flex;align-items:center;gap:7px;
+      background:var(--blue-100);color:var(--blue-700);
+      border:1px solid var(--blue-200);border-radius:999px;
+      padding:7px 12px;font-size:12px;font-weight:700;margin-bottom:18px;
+    }
+    h1 {
+      font-size:clamp(42px,6vw,70px);line-height:1.03;letter-spacing:-3px;
+      max-width:650px;margin-bottom:20px;
+    }
+    h1 span { color:var(--blue-700); }
+    .hero-copy { color:var(--muted);font-size:17px;max-width:550px;margin-bottom:28px; }
+    .budget-box {
+      background:var(--surface);border:1px solid var(--border);border-radius:25px;
+      padding:18px;box-shadow:var(--shadow);max-width:590px;
+    }
+    .budget-label { font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px; }
+    .money-input {
+      display:flex;align-items:center;background:var(--blue-50);
+      border:2px solid var(--blue-200);border-radius:17px;padding:5px 15px;
+      transition:.2s;
+    }
+    .money-input:focus-within { border-color:var(--blue-400);box-shadow:0 0 0 4px rgba(56,189,248,.12); }
+    .currency { font-size:22px;font-weight:800;color:var(--blue-700); }
+    #budget {
+      width:100%;border:0;outline:0;background:transparent;
+      font-size:32px;font-weight:800;color:var(--ink);padding:10px;
+    }
+    .quick { display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 15px; }
+    .quick button {
+      border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);
+      border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;
+    }
+    .quick button:hover,.quick button.active { background:var(--blue-100);border-color:var(--blue-200);color:var(--blue-700); }
+    .primary-btn {
+      border:0;background:var(--blue-700);color:white;border-radius:14px;
+      padding:13px 18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      box-shadow:0 8px 20px rgba(3,105,161,.18);transition:.2s;
+    }
+    .primary-btn:hover { background:var(--blue-900);transform:translateY(-1px); }
+    .red-btn { background:var(--red);box-shadow:0 8px 20px rgba(220,38,38,.16); }
+    .red-btn:hover { background:var(--red-dark); }
+
+    .location-wrap { position:relative;margin-top:13px; }
+    .location-selector {
+      width:100%;border:1px solid var(--border);background:var(--surface);border-radius:14px;
+      padding:13px 14px;display:flex;align-items:center;justify-content:space-between;
+      color:var(--text-tertiary);font-weight:700;
+    }
+    .location-left { display:flex;align-items:center;gap:9px; }
+    .location-left i { color:var(--red);width:18px; }
+    .location-note { font-size:11px;color:var(--muted);margin-top:7px;margin-left:4px; }
+    .location-dropdown {
+      display:none;position:absolute;left:0;right:0;top:53px;background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:6px;box-shadow:var(--shadow);z-index:10;
+    }
+    .location-dropdown.show { display:block; }
+    .location-dropdown button { width:100%;border:0;background:transparent;text-align:left;padding:10px;border-radius:9px;color:var(--text-secondary); }
+    .location-dropdown button:hover { background:var(--blue-50);color:var(--blue-700); }
+
+    .hero-visual { position:relative;min-height:440px;display:grid;place-items:center; }
+    .buying-power-card {
+      width:min(390px,100%);background:var(--surface);border:1px solid var(--border);border-radius:30px;
+      padding:25px;box-shadow:0 25px 60px rgba(3,105,161,.13);transform:rotate(1.5deg);
+    }
+    .power-top { display:flex;justify-content:space-between;align-items:center;margin-bottom:24px; }
+    .mini-label { color:var(--muted);font-size:12px;font-weight:600; }
+    .power-amount { font-size:47px;letter-spacing:-2px;font-weight:800;margin:3px 0; }
+    .power-badge { background:var(--green-soft);color:var(--green);border-radius:999px;padding:6px 9px;font-size:10px;font-weight:700; }
+    .mini-item {
+      display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--divider);
+    }
+    .mini-icon { width:42px;height:42px;border-radius:13px;background:var(--blue-100);color:var(--blue-700);display:grid;place-items:center; }
+    .mini-info { flex:1; }
+    .mini-info strong { display:block;font-size:13px; }
+    .mini-info small { color:var(--muted);font-size:11px; }
+    .mini-price { font-weight:800;font-size:14px; }
+    .floating-pill {
+      position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px 13px;
+      box-shadow:var(--shadow);font-size:11px;font-weight:700;display:flex;align-items:center;gap:7px;
+    }
+    .pill-one { top:45px;right:0; }
+    .pill-two { bottom:45px;left:0; }
+    .floating-pill i { color:var(--green);width:15px; }
+
+    /* Sections */
+    section { padding:75px 0; }
+    .section-head { text-align:center;margin-bottom:36px; }
+    .section-head .kicker { color:var(--blue-700);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px; }
+    .section-head h2 { font-size:clamp(28px,4vw,42px);letter-spacing:-1.6px;margin-bottom:9px; }
+    .section-head p { color:var(--muted);max-width:600px;margin:auto;font-size:14px; }
+
+    /* Photos */
+    .photo-strip { display:grid;grid-template-columns:1.25fr .75fr .75fr;gap:14px;margin:0 0 35px; }
+    .photo-card { position:relative;min-height:220px;border-radius:22px;overflow:hidden;border:1px solid var(--border);background:var(--photo-card-bg);box-shadow:var(--shadow); }
+    .photo-card img { width:100%;height:100%;min-height:220px;object-fit:cover;display:block;transition:transform .5s ease; }
+    .photo-card:hover img { transform:scale(1.045); }
+    .photo-overlay { position:absolute;inset:auto 0 0;padding:28px 18px 16px;background:var(--photo-overlay);color:white; }
+    .photo-overlay strong { display:block;font-size:15px; }
+    .photo-overlay span { font-size:10px;opacity:.82; }
+    .photo-badge { position:absolute;top:12px;left:12px;background:var(--photo-badge-bg);color:var(--blue-700);border-radius:999px;padding:6px 9px;font-size:9px;font-weight:800;backdrop-filter:blur(5px); }
+    .product-photo { width:100%;height:130px;border-radius:14px;object-fit:cover;margin-bottom:14px;display:block;background:var(--blue-100); }
+    .photo-empty { height:130px;border-radius:14px;background:linear-gradient(135deg,var(--blue-100),var(--surface));display:grid;place-items:center;color:var(--blue-700);margin-bottom:14px; }
+
+    /* Results */
+    #results { background:var(--surface); }
+    .result-top { display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:23px; }
+    .result-title h2 { font-size:31px;letter-spacing:-1px; }
+    .result-title p { color:var(--muted);font-size:13px;margin-top:4px; }
+    .budget-chip { background:var(--blue-50);color:var(--blue-700);border:1px solid var(--blue-200);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800; }
+    .categories {
+      display:flex;gap:8px;overflow-x:auto;padding-bottom:7px;margin-bottom:25px;
+      scrollbar-width:none;
+    }
+    .categories::-webkit-scrollbar { display:none; }
+    .cat-btn {
+      flex:0 0 auto;border:1px solid var(--border);background:var(--surface);border-radius:999px;
+      padding:9px 14px;display:flex;align-items:center;gap:7px;color:var(--text-secondary);font-size:12px;font-weight:700;
+      transition:.2s;
+    }
+    .cat-btn:hover,.cat-btn.active { background:var(--blue-700);color:white;border-color:var(--blue-700); }
+    .products { display:grid;grid-template-columns:repeat(4,1fr);gap:15px; }
+    .product-card {
+      background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:17px;
+      box-shadow:var(--card-shadow-sm);transition:.22s;
+      animation:cardIn .35s ease both;
+    }
+    .product-card:hover { transform:translateY(-4px);box-shadow:var(--shadow-hover); }
+    @keyframes cardIn { from { opacity:0;transform:translateY(8px); } to { opacity:1;transform:translateY(0); } }
+    .product-icon { width:43px;height:43px;border-radius:13px;background:var(--blue-100);color:var(--blue-700);display:grid;place-items:center;margin-bottom:16px; }
+    .product-card h3 { font-size:14px;margin-bottom:4px; }
+    .product-price { font-size:22px;font-weight:800;letter-spacing:-.5px; }
+    .product-unit { color:var(--muted);font-size:11px;margin-bottom:13px; }
+    .product-meta { display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--divider);padding-top:11px;font-size:10px;color:var(--muted); }
+    .verified { color:var(--green);font-weight:700;white-space:nowrap; }
+
+    /* Basket */
+    .basket-section { background:var(--blue-50); }
+    .basket-grid { display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:stretch; }
+    .basket-card,.basket-side {
+      background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:25px;box-shadow:var(--shadow);
+    }
+    .basket-card { position:relative;overflow:hidden; }
+    .basket-card::before { content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--blue-100);right:-80px;top:-90px; }
+    .basket-header { position:relative;display:flex;justify-content:space-between;align-items:start;margin-bottom:20px; }
+    .basket-header h2 { font-size:25px;letter-spacing:-1px; }
+    .basket-header .big-budget { font-size:24px;font-weight:800;color:var(--blue-700); }
+    .basket-row { display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-top:1px solid var(--divider);font-size:13px; }
+    .basket-row strong { font-size:13px; }
+    .basket-total { display:flex;justify-content:space-between;border-top:2px solid var(--ink);padding-top:14px;margin-top:7px;font-weight:800; }
+    .remaining { background:var(--green-soft);color:var(--green);padding:13px;border-radius:13px;margin-top:15px;display:flex;justify-content:space-between;font-size:13px;font-weight:800; }
+    .basket-side { display:flex;flex-direction:column;justify-content:center; }
+    .basket-side .spark { width:50px;height:50px;background:var(--orange-soft);color:var(--orange);border-radius:15px;display:grid;place-items:center;margin-bottom:16px; }
+    .basket-side h3 { font-size:24px;letter-spacing:-.8px;margin-bottom:9px; }
+    .basket-side p { color:var(--muted);font-size:13px;margin-bottom:20px; }
+
+    /* Trust */
+    .trust-flow { display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:35px; }
+    .flow-item { background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:14px 18px;text-align:center;font-size:12px;font-weight:700;box-shadow:var(--card-shadow-flow); }
+    .flow-item i { display:block;color:var(--blue-700);margin:auto auto 6px; }
+    .flow-arrow { color:var(--blue-400); }
+    .trust-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:18px; }
+    .trust-card { background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:23px; }
+    .trust-icon { width:45px;height:45px;border-radius:14px;background:var(--blue-100);color:var(--blue-700);display:grid;place-items:center;margin-bottom:16px; }
+    .trust-card h3 { font-size:16px;margin-bottom:7px; }
+    .trust-card p { color:var(--muted);font-size:12px; }
+    .disclaimer { margin-top:22px;background:var(--disclaimer-bg);border:1px solid var(--disclaimer-border);color:var(--disclaimer-text);border-radius:14px;padding:13px 15px;font-size:11px; }
+
+    /* CTA */
+    .cta-grid { display:grid;grid-template-columns:1fr 1fr;gap:18px; }
+    .cta-card { border-radius:24px;padding:30px;min-height:215px;display:flex;flex-direction:column;justify-content:space-between; }
+    .contribute { background:var(--blue-700);color:white; }
+    .shopkeeper { background:var(--surface);border:1px solid var(--border); }
+    .cta-card .cta-icon { width:45px;height:45px;border-radius:14px;background:var(--icon-tint);display:grid;place-items:center; }
+    .shopkeeper .cta-icon { background:var(--orange-soft);color:var(--orange); }
+    .cta-card h2 { font-size:24px;letter-spacing:-.8px;margin:15px 0 5px; }
+    .cta-card p { font-size:12px;opacity:.8;max-width:430px; }
+    .cta-card button { align-self:flex-start;margin-top:17px; }
+    .outline-white { border:1px solid var(--contribute-btn-border);background:transparent;color:white;border-radius:12px;padding:10px 14px;font-weight:700;font-size:12px; }
+    .outline-dark { border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 14px;font-weight:700;font-size:12px; }
+
+    /* How */
+    .steps { display:grid;grid-template-columns:repeat(3,1fr);gap:20px; }
+    .step { background:var(--surface);border:1px solid var(--border);border-radius:21px;padding:25px;position:relative; }
+    .step-number { font-size:12px;font-weight:800;color:var(--red);letter-spacing:1px; }
+    .step h3 { margin:28px 0 7px;font-size:18px; }
+    .step p { color:var(--muted);font-size:12px; }
+    .step::after { content:"";position:absolute;right:22px;top:22px;width:8px;height:8px;border-radius:50%;background:var(--blue-400); }
+
+    /* Map */
+    .map-section { background:var(--surface); }
+    .map-box { min-height:370px;border:1px solid var(--border);border-radius:27px;background:var(--map-bg);position:relative;overflow:hidden; }
+    .map-lines { position:absolute;inset:0;opacity:.6;background-image:linear-gradient(35deg,transparent 48%,var(--map-lines) 49%,var(--map-lines) 51%,transparent 52%),linear-gradient(115deg,transparent 48%,var(--map-lines) 49%,var(--map-lines) 51%,transparent 52%);background-size:90px 90px;transform:rotate(8deg) scale(1.3); }
+    .river { position:absolute;width:125%;height:55px;background:rgba(56,189,248,.2);transform:rotate(-17deg);top:42%;left:-10%;border-radius:50%;filter:blur(1px); }
+    .map-label { position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:10px 12px;box-shadow:var(--shadow);font-size:11px;font-weight:800; }
+    .map-label small { display:block;color:var(--muted);font-weight:500;margin-top:2px; }
+    .map-label.active { border-color:var(--red);box-shadow:0 8px 25px rgba(220,38,38,.13); }
+    .map-pin { position:absolute;width:16px;height:16px;background:var(--red);border:3px solid white;border-radius:50%;box-shadow:0 0 0 6px rgba(220,38,38,.13); }
+    .ghat { left:43%;top:48%; }
+    .putali { left:55%;top:34%;opacity:.55; }
+    .banesh { left:65%;top:59%;opacity:.55; }
+    .thamel { left:31%;top:27%;opacity:.55; }
+    .kote { left:76%;top:69%;opacity:.55; }
+    .label-ghat { left:45%;top:38%; }
+    .label-thamel { left:22%;top:17%;opacity:.75; }
+    .label-putali { left:58%;top:22%;opacity:.75; }
+    .label-banesh { left:67%;top:66%;opacity:.75; }
+    .label-kote { left:78%;top:77%;opacity:.75; }
+    .map-street { position:absolute;background:var(--photo-badge-bg);border:1px solid var(--nav-border);color:var(--muted);border-radius:8px;padding:5px 8px;font-size:9px;font-weight:700;transform:rotate(-8deg); }
+    .s1 { left:24%;top:60%; } .s2 { left:63%;top:38%;transform:rotate(14deg); } .s3 { left:67%;top:70%;transform:rotate(-18deg); } .s4 { left:28%;top:27%;transform:rotate(6deg); }
+    .map-legend { position:absolute;left:20px;bottom:20px;background:var(--surface);border:1px solid var(--border);padding:10px 12px;border-radius:12px;font-size:11px; }
+    .dot { display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:5px; }
+
+    /* Stats */
+    .stats { display:grid;grid-template-columns:repeat(4,1fr);gap:15px; }
+    .stat { background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px; }
+    .stat .num { font-size:31px;font-weight:800;letter-spacing:-1px;color:var(--blue-700); }
+    .stat p { color:var(--muted);font-size:11px; }
+    .prototype-label { text-align:center;color:var(--muted);font-size:10px;margin-top:13px; }
+
+    /* Footer */
+    footer { background:var(--footer-bg);color:var(--footer-text);padding:45px 0 28px; }
+    .footer-grid { display:flex;justify-content:space-between;gap:35px; }
+    .footer-brand p { color:var(--footer-muted);font-size:11px;margin-top:8px; }
+    .footer-links { display:flex;gap:30px;align-items:start; }
+    .footer-links div { display:flex;flex-direction:column;gap:7px; }
+    .footer-links strong { font-size:11px;color:var(--footer-text);margin-bottom:3px; }
+    .footer-links a { color:var(--footer-muted);font-size:11px; }
+    .footer-bottom { border-top:1px solid var(--footer-border);margin-top:30px;padding-top:18px;color:var(--footer-bottom-text);font-size:10px;display:flex;justify-content:space-between; }
+
+    /* Modal */
+    .modal-backdrop { display:none;position:fixed;inset:0;background:var(--modal-backdrop);backdrop-filter:blur(5px);z-index:200;padding:20px;align-items:center;justify-content:center; }
+    .modal-backdrop.show { display:flex; }
+    .modal { width:min(520px,100%);max-height:90vh;overflow:auto;background:var(--surface);border-radius:24px;padding:25px;box-shadow:0 25px 80px rgba(0,0,0,.35);animation:modalIn .2s ease; }
+    @keyframes modalIn { from { opacity:0;transform:scale(.96) translateY(8px); } to { opacity:1;transform:scale(1) translateY(0); } }
+    .modal-head { display:flex;justify-content:space-between;align-items:center;margin-bottom:20px; }
+    .modal-head h2 { font-size:22px;letter-spacing:-.7px; }
+    .close { width:34px;height:34px;border:0;background:var(--blue-50);color:var(--muted);border-radius:10px;display:grid;place-items:center; }
+    .form-grid { display:grid;grid-template-columns:1fr 1fr;gap:13px; }
+    .field { display:flex;flex-direction:column;gap:5px; }
+    .field.full { grid-column:1/-1; }
+    .field label { font-size:11px;font-weight:700;color:var(--text-secondary); }
+    .field input,.field select,.field textarea { width:100%;border:1px solid var(--border);border-radius:11px;padding:10px 11px;outline:0;background:var(--input-bg);color:var(--ink);font-size:12px; }
+    .field input:focus,.field select:focus,.field textarea:focus { border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(56,189,248,.1); }
+    .field textarea { min-height:75px;resize:vertical; }
+    .modal-actions { display:flex;justify-content:flex-end;gap:8px;margin-top:18px; }
+    .success { display:none;text-align:center;padding:25px 10px; }
+    .success.show { display:block; }
+    .success-icon { width:55px;height:55px;background:var(--green-soft);color:var(--green);border-radius:50%;display:grid;place-items:center;margin:0 auto 13px; }
+    .success h3 { margin-bottom:5px; }
+    .success p { color:var(--muted);font-size:12px; }
+
+    /* Responsive */
+    @media (max-width:950px) {
+      .hero-grid { grid-template-columns:1fr; }
+      .hero-visual { min-height:390px; }
+      .products { grid-template-columns:repeat(3,1fr); }
+    }
+    @media (max-width:760px) {
+      .container { width:min(100% - 28px,1160px); }
+      .nav-links,.nav-right { display:none; }
+      .mobile-menu-btn { display:block; }
+      .nav.mobile-open .nav-links {
+        display:flex;position:absolute;left:14px;right:14px;top:66px;background:var(--mobile-menu-bg);
+        border:1px solid var(--border);border-radius:15px;padding:12px;flex-direction:column;align-items:stretch;gap:0;box-shadow:var(--shadow);
+      }
+      .nav.mobile-open .nav-links a { padding:12px;border-radius:8px; }
+      .nav.mobile-open .nav-links a:hover { background:var(--blue-50); }
+      .nav.mobile-open .nav-right { display:flex;position:absolute;right:54px;top:12px; }
+      .hero { padding:48px 0 40px; }
+      h1 { letter-spacing:-2px;font-size:43px; }
+      .hero-visual { min-height:360px; }
+      .floating-pill { display:none; }
+      section { padding:55px 0; }
+      .products { grid-template-columns:repeat(2,1fr); }
+      .basket-grid,.cta-grid { grid-template-columns:1fr; }
+      .trust-grid,.steps { grid-template-columns:1fr; }
+      .trust-flow { overflow-x:auto;justify-content:flex-start;padding-bottom:5px; }
+      .flow-arrow { flex:0 0 auto; }
+      .stats { grid-template-columns:repeat(2,1fr); }
+      .footer-grid { flex-direction:column; }
+      .footer-links { flex-wrap:wrap; }
+      .result-top { align-items:start;flex-direction:column; }
+    }
+    @media (max-width:470px) {
+      .products { grid-template-columns:1fr; }
+      .form-grid { grid-template-columns:1fr; }
+      .field.full { grid-column:auto; }
+      .stats { grid-template-columns:1fr 1fr; }
+      .buying-power-card { padding:20px; }
+      .power-amount { font-size:40px; }
+    }
+
+    ::-webkit-scrollbar { width:10px;height:10px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:var(--scrollbar-thumb);border-radius:99px; }
+  </style>
+</head>
+
+<body>
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#">
+        <div class="brand-mark">K</div>
+        <div>
+          <div class="brand-name">Kati?</div>
+          <div class="brand-tagline">Your money, in real life.</div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="#results">Explore</a>
+        <a href="#how">How it works</a>
+        <a href="#contribute">Contribute</a>
+      </div>
+
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <i data-lucide="moon" id="themeIcon" style="width:16px"></i>
+        </button>
+        <div class="location-nav fixed-location">
+          <i data-lucide="map-pin" style="width:14px"></i> Ghattekulo
+        </div>
+        <div class="avatar"><i data-lucide="user-round" style="width:17px"></i></div>
+      </div>
+
+      <button class="mobile-menu-btn" onclick="toggleMobile()">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="explore">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><i data-lucide="map-pin" style="width:14px"></i> Starting in Kathmandu</div>
+          <h1>What can you buy with <span>Rs. <span id="heroAmount">500</span>?</span></h1>
+          <p class="hero-copy">See what your money can realistically buy around Kathmandu, using local and community price snapshots.</p>
+
+          <div class="budget-box">
+            <div class="budget-label">YOUR BUDGET</div>
+            <div class="money-input">
+              <span class="currency">Rs.</span>
+              <input id="budget" type="number" min="1" step="10" value="500" aria-label="Budget">
+            </div>
+
+            <div class="quick">
+              <button data-amount="100">Rs. 100</button>
+              <button data-amount="500" class="active">Rs. 500</button>
+              <button data-amount="1000">Rs. 1,000</button>
+              <button data-amount="5000">Rs. 5,000</button>
+            </div>
+
+            <button class="primary-btn red-btn" id="showResults">
+              Show me what I can buy <i data-lucide="arrow-down" style="width:16px"></i>
+            </button>
+
+            <div class="location-wrap">
+              <div class="location-selector fixed-location-selector">
+                <span class="location-left"><i data-lucide="map-pin"></i><span>Ghattekulo, Kathmandu</span></span>
+                <span class="fixed-badge">ONLY AREA</span>
+              </div>
+              <div class="location-note">This prototype currently covers Ghattekulo only. Prices are based on local observations and contributions.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="floating-pill pill-one"><i data-lucide="badge-check"></i> Community price</div>
+          <div class="buying-power-card">
+            <div class="power-top">
+              <div>
+                <div class="mini-label">YOUR BUYING POWER</div>
+                <div class="power-amount">Rs. <span id="visualAmount">500</span></div>
+              </div>
+              <div class="power-badge">PROTOTYPE</div>
+            </div>
+
+            <div class="mini-item">
+              <div class="mini-icon"><i data-lucide="utensils"></i></div>
+              <div class="mini-info"><strong>Chicken Momo</strong><small>1 plate</small></div>
+              <div class="mini-price">Rs. 180</div>
+            </div>
+            <div class="mini-item">
+              <div class="mini-icon"><i data-lucide="coffee"></i></div>
+              <div class="mini-info"><strong>Milk Tea</strong><small>2 cups</small></div>
+              <div class="mini-price">Rs. 60</div>
+            </div>
+            <div class="mini-item">
+              <div class="mini-icon"><i data-lucide="bus"></i></div>
+              <div class="mini-info"><strong>Bus Rides</strong><small>2 rides</small></div>
+              <div class="mini-price">Rs. 60</div>
+            </div>
+            <div class="mini-item">
+              <div class="mini-icon"><i data-lucide="package"></i></div>
+              <div class="mini-info"><strong>Toothpaste</strong><small>1 tube</small></div>
+              <div class="mini-price">Rs. 120</div>
+            </div>
+          </div>
+          <div class="floating-pill pill-two"><i data-lucide="check-circle"></i> Last checked recently</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="container">
+        <div class="result-top">
+          <div class="result-title">
+            <h2>With Rs. <span id="resultAmount">500</span>, you could get...</h2>
+            <p>A snapshot of everyday prices around <span id="resultLocation">Ghattekulo</span>.</p>
+          </div>
+          <div class="budget-chip">Prototype price data</div>
+        </div>
+
+        <div class="categories" id="categories">
+          <button class="cat-btn active" data-category="all"><i data-lucide="layout-grid"></i> All</button>
+          <button class="cat-btn" data-category="food"><i data-lucide="utensils"></i> Food</button>
+          <button class="cat-btn" data-category="hygiene"><i data-lucide="sparkles"></i> Hygiene</button>
+          <button class="cat-btn" data-category="coffee"><i data-lucide="coffee"></i> Coffee</button>
+          <button class="cat-btn" data-category="transport"><i data-lucide="bus"></i> Transport</button>
+          <button class="cat-btn" data-category="mobile"><i data-lucide="smartphone"></i> Mobile</button>
+          <button class="cat-btn" data-category="fuel"><i data-lucide="fuel"></i> Fuel</button>
+          <button class="cat-btn" data-category="entertainment"><i data-lucide="film"></i> Entertainment</button>
+          <button class="cat-btn" data-category="essentials"><i data-lucide="shopping-bag"></i> Essentials</button>
+        </div>
+
+        <div class="photo-strip">
+          <div class="photo-card">
+            <span class="photo-badge">GHATTEKULO</span>
+            <img src="https://backend.lalpurjanepal.com.np/media/properties/IMG-20250728-WA0042.jpg" alt="A residential street in Ghattekulo, Kathmandu" loading="lazy">
+            <div class="photo-overlay"><strong>Everyday Ghattekulo</strong><span>A local street scene from the neighborhood</span></div>
+          </div>
+          <div class="photo-card">
+            <span class="photo-badge">FOOD</span>
+            <img src="https://assets.noshnepal.com/fb3ccdc2-1e20-4bba-b220-02e4d70eb48fimage" alt="Steamed momos with Nepali chutneys" loading="lazy">
+            <div class="photo-overlay"><strong>Momo & achar</strong><span>Example local food category</span></div>
+          </div>
+          <div class="photo-card">
+            <span class="photo-badge">LOCAL LIFE</span>
+            <img src="https://images.mindtrip.ai/restaurants/ecbb/47c5/9727/6f94/a3cd/a5e3/9806/822b" alt="Freshly steamed momos at a Kathmandu eatery" loading="lazy">
+            <div class="photo-overlay"><strong>Real-world prices</strong><span>Photos add context to the things you buy</span></div>
+          </div>
+        </div>
+        <div class="products" id="products"></div>
+      </div>
+    </section>
+
+    <section class="basket-section">
+      <div class="container basket-grid">
+        <div class="basket-card">
+          <div class="basket-header">
+            <div>
+              <div class="mini-label">BUILD MY BUDGET</div>
+              <h2>Build my Rs. <span id="basketBudget">500</span></h2>
+            </div>
+            <div class="big-budget">Rs. <span id="basketTopAmount">500</span></div>
+          </div>
+          <div id="basketItems"></div>
+          <div class="basket-total"><span>Total</span><span>Rs. <span id="basketTotal">420</span></span></div>
+          <div class="remaining"><span>You still have</span><span>Rs. <span id="remaining">80</span></span></div>
+        </div>
+
+        <div class="basket-side">
+          <div class="spark"><i data-lucide="wand-sparkles"></i></div>
+          <h3>Make your budget work for you.</h3>
+          <p>Kati? can build simple combinations from everyday local prices, helping you understand what an amount actually buys.</p>
+          <button class="primary-btn" id="tryCombination">Try another combination <i data-lucide="shuffle" style="width:15px"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Trust matters</div>
+          <h2>Where do these prices come from?</h2>
+          <p>Prices are intended to become more useful as local observations and community contributions grow.</p>
+        </div>
+
+        <div class="trust-flow">
+          <div class="flow-item"><i data-lucide="store"></i>Local observations</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-item"><i data-lucide="users"></i>Community contributions</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-item"><i data-lucide="shield-check"></i>Verification</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-item"><i data-lucide="trending-up"></i>Better local prices</div>
+        </div>
+
+        <div class="trust-grid">
+          <div class="trust-card">
+            <div class="trust-icon"><i data-lucide="store"></i></div>
+            <h3>Local Checks</h3>
+            <p>Prices can be collected by visiting local shops and businesses.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon"><i data-lucide="message-square-plus"></i></div>
+            <h3>Community Reports</h3>
+            <p>Users can suggest prices based on their own recent experiences.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon"><i data-lucide="badge-check"></i></div>
+            <h3>Verified Prices</h3>
+            <p>Repeated reports or shopkeeper-provided prices can receive a verification badge.</p>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          Prices can change by store, location, brand, and date. Kati? is designed to show a useful local snapshot, not guaranteed prices.
+        </div>
+      </div>
+    </section>
+
+    <section id="contribute" style="padding-top:25px;">
+      <div class="container cta-grid">
+        <div class="cta-card contribute">
+          <div>
+            <div class="cta-icon"><i data-lucide="hand-helping"></i></div>
+            <h2>Know a better local price?</h2>
+            <p>Help make Kati? more accurate for your neighborhood.</p>
+          </div>
+          <button class="outline-white" onclick="openModal('priceModal')">Suggest a Price <i data-lucide="arrow-up-right" style="width:14px;vertical-align:middle"></i></button>
+        </div>
+        <div class="cta-card shopkeeper">
+          <div>
+            <div class="cta-icon"><i data-lucide="store"></i></div>
+            <h2>Are you a shopkeeper?</h2>
+            <p>Add your own prices and help customers understand what they can get with their money.</p>
+          </div>
+          <button class="outline-dark" onclick="openModal('storeModal')">Add My Store <i data-lucide="plus" style="width:14px;vertical-align:middle"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Simple by design</div>
+          <h2>How it works</h2>
+          <p>Three steps from a number in your wallet to a clearer idea of its buying power.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">01</div>
+            <h3>Enter your budget</h3>
+            <p>Choose an amount such as Rs. 500, Rs. 1,000, or Rs. 5,000.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">02</div>
+            <h3>Choose your area</h3>
+            <p>Start with Ghattekulo and expand to more parts of Kathmandu.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">03</div>
+            <h3>Discover your buying power</h3>
+            <p>See everyday products, services, and combinations that fit your budget.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="map-section">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Ghattekulo only</div>
+          <h2>One neighborhood. Real local context.</h2>
+          <p>Kati? starts with a focused price map of Ghattekulo rather than mixing prices from different areas.</p>
+        </div>
+        <div class="map-box ghat-only-map">
+          <div class="map-lines"></div>
+          <div class="river"></div>
+          <div class="map-pin ghat"></div>
+          <div class="map-label active label-ghat">Ghattekulo<small>Currently available</small></div>
+          <div class="map-street s1">Ghattekulo Marga</div>
+          <div class="map-street s2">Himal Marg</div>
+          <div class="map-street s3">Sangam Galli</div>
+          <div class="map-street s4">New Plaza Marg</div>
+          <div class="map-legend"><span class="dot"></span> Ghattekulo price area</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head" style="margin-bottom:25px;">
+          <div class="kicker">Prototype snapshot</div>
+          <h2>Early local data</h2>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num">48</div><p>Sample prices · Ghattekulo</p></div>
+          <div class="stat"><div class="num">8</div><p>Categories</p></div>
+          <div class="stat"><div class="num">12</div><p>Ghattekulo price points</p></div>
+          <div class="stat"><div class="num">Rs. 500</div><p>Example budget</p></div>
+        </div>
+        <div class="prototype-label">Prototype data — figures are illustrative, not live statistics.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand">
+            <div class="brand-mark">K</div>
+            <div><div class="brand-name">Kati?</div><div class="brand-tagline" style="color:#a9c0ce;">Your money, in real life.</div></div>
+          </div>
+          <p>Starting in Ghattekulo, Kathmandu 🇳🇵</p>
+        </div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="#results">Prices</a><a href="#how">How it works</a></div>
+          <div><strong>Community</strong><a href="#contribute">Contribute</a><a href="#contribute">Shopkeepers</a></div>
+          <div><strong>About</strong><a href="#explore">Kati?</a><a href="#results">Prototype</a></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Kati? Prototype</span>
+        <span>Prices shown are illustrative.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Suggest Price Modal -->
+  <div class="modal-backdrop" id="priceModal">
+    <div class="modal">
+      <div class="modal-head"><h2>Suggest a Price</h2><button class="close" onclick="closeModal('priceModal')"><i data-lucide="x"></i></button></div>
+      <form id="priceForm">
+        <div class="form-grid">
+          <div class="field"><label>Item name</label><input required placeholder="e.g. Chicken Momo"></div>
+          <div class="field"><label>Category</label><select><option>Food</option><option>Hygiene</option><option>Coffee</option><option>Transport</option><option>Mobile</option><option>Fuel</option><option>Entertainment</option><option>Essentials</option></select></div>
+          <div class="field"><label>Price (Rs.)</label><input type="number" required placeholder="180"></div>
+          <div class="field"><label>Store / place</label><input required placeholder="Shop or restaurant"></div>
+          <div class="field"><label>Area</label><input required placeholder="Ghattekulo"></div>
+          <div class="field"><label>Date checked</label><input type="date" required></div>
+          <div class="field full"><label>Optional note</label><textarea placeholder="Anything useful about this price..."></textarea></div>
+        </div>
+        <div class="modal-actions"><button type="button" class="outline-dark" onclick="closeModal('priceModal')">Cancel</button><button class="primary-btn" type="submit">Submit Price</button></div>
+      </form>
+      <div class="success" id="priceSuccess"><div class="success-icon"><i data-lucide="check"></i></div><h3>Thanks!</h3><p>Your price suggestion has been recorded for this prototype.</p></div>
+    </div>
+  </div>
+
+  <!-- Store Modal -->
+  <div class="modal-backdrop" id="storeModal">
+    <div class="modal">
+      <div class="modal-head"><h2>Add My Store</h2><button class="close" onclick="closeModal('storeModal')"><i data-lucide="x"></i></button></div>
+      <form id="storeForm">
+        <div class="form-grid">
+          <div class="field full"><label>Store name</label><input required placeholder="Your store name"></div>
+          <div class="field"><label>Location</label><input required placeholder="Ghattekulo"></div>
+          <div class="field"><label>Category</label><select><option>Food</option><option>Hygiene</option><option>Coffee</option><option>Essentials</option><option>Other</option></select></div>
+          <div class="field"><label>Contact</label><input required placeholder="Phone or email"></div>
+          <div class="field"><label>Example product</label><input required placeholder="e.g. Momo — Rs. 180"></div>
+          <div class="field full"><label>Example products</label><textarea placeholder="Add a few products and prices..."></textarea></div>
+        </div>
+        <div class="modal-actions"><button type="button" class="outline-dark" onclick="closeModal('storeModal')">Cancel</button><button class="primary-btn" type="submit">Add Store</button></div>
+      </form>
+      <div class="success" id="storeSuccess"><div class="success-icon"><i data-lucide="check"></i></div><h3>Store added!</h3><p>Your store information has been recorded for this prototype.</p></div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      {name:"Chicken Momo",category:"food",price:180,unit:"1 plate",location:"Ghattekulo",verified:true,icon:"utensils",photo:"https://assets.noshnepal.com/fb3ccdc2-1e20-4bba-b220-02e4d70eb48fimage"},
+      {name:"Dal Bhat",category:"food",price:250,unit:"1 local meal",location:"Ghattekulo",verified:true,icon:"utensils",photo:"https://loremflickr.com/400/300/dalbhat,nepal"},
+      {name:"Milk",category:"essentials",price:60,unit:"1 litre",location:"Ghattekulo",verified:true,icon:"milk",photo:"https://loremflickr.com/400/300/milk,bottle"},
+      {name:"Toothpaste",category:"hygiene",price:120,unit:"1 small/medium tube",location:"Ghattekulo",verified:true,icon:"sparkles",photo:"https://loremflickr.com/400/300/toothpaste"},
+      {name:"Bathing Soap",category:"hygiene",price:55,unit:"1 bar",location:"Ghattekulo",verified:true,icon:"droplets",photo:"https://loremflickr.com/400/300/soap,bar"},
+      {name:"Milk Tea",category:"coffee",price:30,unit:"1 cup",location:"Ghattekulo",verified:true,icon:"coffee",photo:"https://images.mindtrip.ai/restaurants/1635/98e0/3dda/8c10/cbc6/5793/4f24/f188"},
+      {name:"Coffee",category:"coffee",price:150,unit:"1 cup",location:"Ghattekulo",verified:true,icon:"coffee",photo:"https://loremflickr.com/400/300/coffee,cup"},
+      {name:"Local Bus Ride",category:"transport",price:30,unit:"1 ride",location:"Ghattekulo",verified:true,icon:"bus",photo:"https://loremflickr.com/400/300/localbus,nepal"},
+      {name:"Pathao / Taxi",category:"transport",price:250,unit:"short trip",location:"Ghattekulo",verified:false,icon:"car-front",photo:"https://loremflickr.com/400/300/taxi,motorbike"},
+      {name:"Mobile Data Pack",category:"mobile",price:100,unit:"example data pack",location:"Ghattekulo",verified:true,icon:"smartphone",photo:"https://loremflickr.com/400/300/smartphone,data"},
+      {name:"Petrol",category:"fuel",price:180,unit:"1 litre",location:"Kathmandu",verified:false,icon:"fuel",photo:"https://loremflickr.com/400/300/petrolpump,fuel"},
+      {name:"Movie Ticket",category:"entertainment",price:350,unit:"1 ticket",location:"Kathmandu",verified:false,icon:"film",photo:"https://loremflickr.com/400/300/cinema,movietheater"},
+      {name:"Chowmein",category:"food",price:160,unit:"1 plate",location:"Ghattekulo",verified:true,icon:"utensils",photo:"https://loremflickr.com/400/300/chowmein,noodles"},
+      {name:"Eggs",category:"essentials",price:20,unit:"1 egg",location:"Ghattekulo",verified:true,icon:"egg",photo:"https://loremflickr.com/400/300/eggs,basket"},
+      {name:"Bottled Water",category:"essentials",price:25,unit:"1 litre",location:"Ghattekulo",verified:true,icon:"glass-water",photo:"https://loremflickr.com/400/300/waterbottle"},
+      {name:"Cold Drink",category:"essentials",price:80,unit:"1 bottle",location:"Ghattekulo",verified:false,icon:"cup-soda",photo:"https://loremflickr.com/400/300/soda,cola"},
+      {name:"Instant Noodles",category:"essentials",price:35,unit:"1 packet",location:"Ghattekulo",verified:true,icon:"package",photo:"https://loremflickr.com/400/300/instantnoodles"},
+      {name:"Laundry Soap",category:"hygiene",price:90,unit:"1 bar",location:"Ghattekulo",verified:false,icon:"soap-dispenser-droplet",photo:"https://loremflickr.com/400/300/laundrysoap"},
+      {name:"Mobile Recharge",category:"mobile",price:100,unit:"example recharge",location:"Ghattekulo",verified:true,icon:"smartphone",photo:"https://loremflickr.com/400/300/mobilephone,recharge"},
+      {name:"Local Microbus",category:"transport",price:35,unit:"1 ride",location:"Kathmandu",verified:true,icon:"bus-front",photo:"https://loremflickr.com/400/300/microbus,nepal"},
+      {name:"Samosa",category:"food",price:25,unit:"1 piece",location:"Ghattekulo",verified:true,icon:"utensils",photo:"https://loremflickr.com/400/300/samosa"},
+      {name:"Lassi",category:"coffee",price:100,unit:"1 glass",location:"Ghattekulo",verified:false,icon:"glass-water",photo:"https://loremflickr.com/400/300/lassi,yogurtdrink"}
+    ];
+
+    let currentCategory = "all";
+    let currentBudget = 500;
+    let comboIndex = 0;
+
+    const $ = id => document.getElementById(id);
+    const formatRs = n => Math.round(n).toLocaleString("en-IN");
+
+    function renderProducts() {
+      const list = products.filter(p => currentCategory === "all" ? true : p.category === currentCategory);
+      const budget = currentBudget;
+      const affordable = list.filter(p => p.price <= budget);
+      const shown = affordable.length ? affordable : list;
+      $("products").innerHTML = shown.map((p,i) => `
+        <article class="product-card" style="animation-delay:${i*25}ms">
+          ${p.photo ? `<img class="product-photo" src="${p.photo}" alt="${p.name}" loading="lazy">` : `<div class="photo-empty"><i data-lucide="${p.icon}" style="width:28px;height:28px"></i></div>`}
+          <div class="product-icon" style="display:none"><i data-lucide="${p.icon}"></i></div>
+          <h3>${p.name}</h3>
+          <div class="product-price">Rs. ${formatRs(p.price)}</div>
+          <div class="product-unit">${p.unit}</div>
+          <div class="product-meta">
+            <span>${p.location}</span>
+            <span class="${p.verified ? "verified" : ""}">${p.verified ? "✓ Recently checked" : "Community price"}</span>
+          </div>
+        </article>
+      `).join("");
+      lucide.createIcons();
+    }
+
+    function buildBasket() {
+      const b = currentBudget;
+      let basket = [];
+
+      const combos = [
+        [
+          ["Chicken Momo",1],
+          ["Milk Tea",2],
+          ["Toothpaste",1],
+          ["Local Bus Ride",2]
+        ],
+        [
+          ["Dal Bhat",1],
+          ["Milk Tea",2],
+          ["Samosa",2],
+          ["Local Bus Ride",2]
+        ],
+        [
+          ["Chicken Momo",1],
+          ["Coffee",1],
+          ["Bottled Water",1],
+          ["Local Bus Ride",2]
+        ]
+      ];
+
+      const chosen = combos[comboIndex % combos.length];
+      let total = 0;
+
+      chosen.forEach(([name,qty]) => {
+        const p = products.find(x => x.name === name);
+        if (p && total + p.price * qty <= b) {
+          basket.push([p,qty]);
+          total += p.price * qty;
+        }
+      });
+
+      // For larger budgets, scale a reasonable basket with extra items.
+      if (b >= 1000) {
+        const extras = [
+          ["Chicken Momo",2],["Milk Tea",4],["Local Bus Ride",4],["Toothpaste",1]
+        ];
+        for (const [name,qty] of extras) {
+          const p = products.find(x => x.name === name);
+          if (p && total + p.price * qty <= b && !basket.some(x=>x[0].name===name)) {
+            basket.push([p,qty]); total += p.price*qty;
+          }
+        }
+      }
+
+      if (!basket.length) {
+        const cheapest = [...products].sort((a,b)=>a.price-b.price)[0];
+        basket = [[cheapest,1]];
+        total = cheapest.price;
+      }
+
+      $("basketItems").innerHTML = basket.map(([p,qty]) => `
+        <div class="basket-row">
+          <span><strong>${p.name}</strong> × ${qty}</span>
+          <span>Rs. ${formatRs(p.price*qty)}</span>
+        </div>
+      `).join("");
+
+      $("basketTotal").textContent = formatRs(total);
+      $("remaining").textContent = formatRs(Math.max(0,b-total));
+      $("basketBudget").textContent = formatRs(b);
+      $("basketTopAmount").textContent = formatRs(b);
+    }
+
+    function updateBudget(value) {
+      currentBudget = Math.max(1, Number(value) || 1);
+      $("budget").value = currentBudget;
+      $("heroAmount").textContent = formatRs(currentBudget);
+      $("visualAmount").textContent = formatRs(currentBudget);
+      $("resultAmount").textContent = formatRs(currentBudget);
+      document.querySelectorAll(".quick button").forEach(btn => {
+        btn.classList.toggle("active", Number(btn.dataset.amount) === currentBudget);
+      });
+      renderProducts();
+      buildBasket();
+    }
+
+    document.querySelectorAll(".quick button").forEach(btn => {
+      btn.addEventListener("click", () => updateBudget(btn.dataset.amount));
+    });
+
+    $("budget").addEventListener("input", e => updateBudget(e.target.value));
+
+    document.querySelectorAll(".cat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".cat-btn").forEach(x=>x.classList.remove("active"));
+        btn.classList.add("active");
+        currentCategory = btn.dataset.category;
+        renderProducts();
+      });
+    });
+
+    $("showResults").addEventListener("click", () => {
+      $("results").scrollIntoView({behavior:"smooth"});
+    });
+
+    $("tryCombination").addEventListener("click", () => {
+      comboIndex++;
+      buildBasket();
+    });
+
+    function toggleMobile() {
+      $("nav").classList.toggle("mobile-open");
+    }
+
+    // Theme (light/dark) toggle — defaults to the system preference, in-memory only.
+    let currentTheme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    function applyTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.style.colorScheme = theme;
+      const icon = $("themeIcon");
+      if (icon) {
+        icon.setAttribute("data-lucide", theme === "dark" ? "sun" : "moon");
+        lucide.createIcons();
+      }
+    }
+    function toggleTheme() {
+      applyTheme(currentTheme === "dark" ? "light" : "dark");
+    }
+    applyTheme(currentTheme);
+
+    function openModal(id) {
+      $(id).classList.add("show");
+      const success = id === "priceModal" ? $("priceSuccess") : $("storeSuccess");
+      success.classList.remove("show");
+      const form = id === "priceModal" ? $("priceForm") : $("storeForm");
+      form.style.display = "block";
+      lucide.createIcons();
+    }
+    function closeModal(id) { $(id).classList.remove("show"); }
+
+    $("priceForm").addEventListener("submit", e => {
+      e.preventDefault();
+      e.target.style.display = "none";
+      $("priceSuccess").classList.add("show");
+      lucide.createIcons();
+    });
+    $("storeForm").addEventListener("submit", e => {
+      e.preventDefault();
+      e.target.style.display = "none";
+      $("storeSuccess").classList.add("show");
+      lucide.createIcons();
+    });
+
+    document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+      backdrop.addEventListener("click", e => {
+        if (e.target === backdrop) backdrop.classList.remove("show");
+      });
+    });
+
+    // Initial render
+    renderProducts();
+    buildBasket();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
