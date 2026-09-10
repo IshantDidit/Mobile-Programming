@@ -7,7 +7,7 @@
 </head>
 <body>
    <h1>Marks</h1>
-   <form>
+   <form onsubmit="event.preventDefault(); sum();"> 
     <input type="number" id="a" placeholder="Enter first marks" required max="100" min="0">
     <input type="number" id="b" placeholder="Enter second marks">
     <input type="number" id="c" placeholder="Enter third marks">
@@ -16,7 +16,7 @@
     <input type="number" id="f" placeholder="Enter sixth marks">
     <input type="number" id="g" placeholder="Enter seventh marks">  
     <input type="number" id="h" placeholder="Enter eighth marks">
-    <button type="submit" onclick="sum()">Calculate Sum</button>
+    <button type="onsubmit">Calculate Sum</button>
    </form>
     
     <p id="result1"></p>
