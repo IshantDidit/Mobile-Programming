@@ -27,7 +27,7 @@ function sum(){
         text = "Second Divison";
         text3="Fail"
     }
-    else if (sum<400){
+    else (sum<400){
         text="No divsion"
         text3="Fail"
     }
