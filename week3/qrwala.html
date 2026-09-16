@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $("#showBtn").click(function() {
+                $("#qr").show(1000);
+            });
+            $("#hideBtn").click(function() {
+                $("#qr").hide(1000);
+            });
+
+        });
+    </script>
+</head>
+<body>
+       <style>
+    #card {
+        border: 2px solid black;
+        padding: 20px;
+        width: 250px;
+    }
+</style>
+
+ <div id="card">
+    <img src="photo.png" width="70" height="70">
+    <h2 id="name">ID/week3</h2>
+    <p>ID: 12345</p>
+    <p>Address: Kathmandu Nepal</p>
+    <p>Contact : 9834848338</p>
+  </div>
+    <style>
+        #qr {
+            display: none;
+        }
+    </style> 
+    <img id="qr" src="qr.png" alt="qr code present">
+
+    <button id="hideBtn">Hide</button>
+    <button id="showBtn">Show</button>
+ 
+</body>
+</html>
