@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+
+    $(".small").animate({ top: '250px' }, 1000, function(){
+      $(this).css("background", "red");
+    });
+
+    $(".small").animate({ left: '250px' }, 1000, function(){
+      $(this).css("background", "blue");
+    });
+
+    $(".small").animate({ top: '0px' }, 1000, function(){
+      $(this).css("background", "green");
+    });
+
+    $(".small").animate({ left: '0px' }, 1000, function(){
+      $(this).css("background", "orange");
+    });
+
+  });
+});
+</script>
+
+</head>
+
+<body>
+
+<button>Start Animation</button>
+
+<div style="
+  border:2px solid black;
+  height:300px;
+  width:300px;
+  position:absolute;
+">
+
+  <div class="small" style="
+    background:green;
+    height:50px;
+    width:50px;
+    position:absolute;
+  "></div>
+
+</div>
+
+</body>
+</html>

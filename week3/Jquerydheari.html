@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery Profile</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <style>
+    #profile-card{width:350px;padding:15px;background:white;border:1px solid #ddd}
+    #profile-photo{width:120px;height:120px;object-fit:cover}
+    button{margin:3px}
+    #output{margin-top:10px;padding:8px;border:1px solid #ccc}
+    #profile-card.highlighted {
+  background: indigo;
+  border: 3px solid #f1c40f;
+}
+    .dark-mode{background:#222!important;color:white}
+    .rounded{border-radius:50%}
+    .shadow{box-shadow:0 0 15px #555}
+  </style>
+</head>
+
+<body>
+  <div id="profile-card">
+    <h2 id="student-name">Ishant Dahal</h2>
+
+    <img id="profile-photo" src="photo.png" alt="Profile photo">
+
+    <p id="student-bio">
+      I am learning <strong>jQuery</strong> To be fair i dont know anything
+
+    <ul id="skills-list">
+      <li>python</li>
+      <li>java</li>
+      <li>JavaScript</li>
+    </ul>
+
+    <input id="nickname-input" type="text" placeholder="Enter nickname">
+  </div>
+
+  <button id="show-name">Show Name</button>
+  <button id="change-name">Change Name</button>
+  <button id="show-bio">Show Bio</button>
+  <button id="get-input">Get Input</button>
+  <button id="set-input">Set Input</button><br>
+
+  <button id="highlight-card">Highlight Card</button>
+  <button id="remove-highlight">Remove Highlight</button>
+  <button id="dark-mode">Toggle Dark Mode</button>
+  <button id="rounded">Toggle Rounded</button><br>
+
+  <button id="copper-background">Copper Background</button>
+  <button id="reset-background">Reset Background</button>
+  <button id="hide-photo">Hide Photo</button>
+  <button id="show-photo">Show Photo</button>
+  <button id="toggle-bio">Toggle Bio</button><br>
+
+  <button id="fade-out">Fade Out Card</button>
+  <button id="fade-in">Fade In Card</button>
+  <button id="fade-half">Fade to 50%</button><br>
+
+  <button id="slide-up">Slide Up Skills</button>
+  <button id="slide-down">Slide Down Skills</button>
+  <button id="slide-toggle">Slide Toggle Skills</button>
+  <button id="animate-card">Animate Card</button>
+
+  <div id="output"></div>
+
+  <script>
+    $(function () {
+      const card = $("#profile-card");
+      const photo = $("#profile-photo");
+      const output = $("#output");
+
+      $("#show-name").click(() => output.text($("#student-name").text()));
+      $("#change-name").click(() => $("#student-name").text("I am ishant"));
+      $("#show-bio").click(() => output.text($("#student-bio").html()));
+      $("#get-input").click(() => output.text($("#nickname-input").val()));
+      $("#set-input").click(() => $("#nickname-input").val("Hello Hi so bye"));
+
+      $("#highlight-card").click(() => card.addClass("highlighted"));
+      $("#remove-highlight").click(() => card.removeClass("highlighted"));
+      $("#dark-mode").click(() => card.toggleClass("dark-mode"));
+      $("#rounded").click(() => photo.toggleClass("rounded"));
+
+      $("#copper-background").click(() => card.css("background", "#b87333 "));
+      $("#reset-background").click(() => card.css("background", "white"));
+
+      $("#hide-photo").click(() => photo.hide("slow"));
+      $("#show-photo").click(() => photo.show("slow"));
+      $("#toggle-bio").click(() => $("#student-bio").toggle());
+
+      $("#fade-out").click(() => card.fadeOut());
+      $("#fade-in").click(() => card.fadeIn());
+      $("#fade-half").click(() => card.fadeTo("slow", 0.5));
+
+      $("#slide-up").click(() => $("#skills-list").slideUp());
+      $("#slide-down").click(() => $("#skills-list").slideDown());
+      $("#slide-toggle").click(() => $("#skills-list").slideToggle());
+
+      $("#animate-card").click(() =>
+        card.animate({marginLeft: "200px"}, 1000)
+            .animate({marginLeft: "0px"}, 1000)
+      );
+
+      photo.hover(
+        () => photo.addClass("shadow"),
+        () => photo.removeClass("shadow")
+      );
+
+      $("#nickname-input").keydown(e => output.text(e.key));
+    });
+  </script>
+</body>
+</html>
