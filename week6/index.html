@@ -3,10 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Firebase Example</title>
 </head>
+
 <body>
+
     <p>Hello mero vai</p>
+
+    <button onclick="writeUserData(
+        1,
+        'Khanal',
+        'Abiral',
+        'abiral@gmail.com',
+        '9800000001',
+        'Kathmandu',
+        'Kathmandu',
+        20,
+        'Male',
+        'Student'
+    )">
+        Add User 1
+    </button>
+
+    <button onclick="writeUserData(
+        2,
+        'fief',
+        'Abiral',
+        'abiral2@gmail.com',
+        '9800000002',
+        'Pokhara',
+        'Gandaki',
+        21,
+        'Male',
+        'Student'
+    )">
+        Add User 2
+    </button>
+
+    <button onclick="writeUserData(
+        3,
+        'Sharma',
+        'Sita',
+        'sita@gmail.com',
+        '9800000003',
+        'Lalitpur',
+        'Bagmati',
+        22,
+        'Female',
+        'Teacher'
+    )">
+        Add User 3
+    </button>
+
+    <button onclick="writeUserData(
+        4,
+        'Thapa',
+        'Ram',
+        'ram@gmail.com',
+        '9800000004',
+        'Bhaktapur',
+        'Bagmati',
+        25,
+        'Male',
+        'Engineer'
+    )">
+        Add User 4
+    </button>
+
+    <button onclick="writeUserData(
+        5,
+        'Gurung',
+        'Maya',
+        'maya@gmail.com',
+        '9800000005',
+        'Chitwan',
+        'Bagmati',
+        23,
+        'Female',
+        'Designer'
+    )">
+        Add User 5
+    </button>
+
+    <button onclick="readUser(2)">List User 2</button>
+
     <script type="module" src="script.js"></script>
+
 </body>
 </html>
